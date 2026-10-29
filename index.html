@@ -1,0 +1,394 @@
+<meta name="dash-one-writer">
+<div class="pt">
+<style>
+.pt{container-type:inline-size;font-family:var(--font-anthropic-sans);color:var(--color-fg);max-width:1200px;margin-inline:auto;display:flex;flex-direction:column;gap:var(--cds-gap-lg)}
+.pt h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0}
+.pt h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
+.pt p{margin:0}
+.pt .pt-sub{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.pt .pt-take{font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-xs)}
+.pt b{font-weight:600;font-variant-numeric:tabular-nums}
+.pt-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:var(--cds-gap-md)}
+.pt-card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg);display:flex;flex-direction:column;gap:var(--cds-gap-sm);min-width:0}
+.pt-syncrow{display:flex;align-items:center;gap:var(--cds-gap-sm);margin-top:var(--cds-gap-sm)}
+.pt-sync{font:inherit;font-size:var(--cds-font-size-caption);padding:var(--cds-pad-xs) var(--cds-pad-md);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);background:var(--color-panel);color:var(--color-fg);cursor:pointer}
+.pt-sync:disabled{opacity:.5;cursor:default}
+.pt-note{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.pt-tile .pt-fig{font-family:var(--font-anthropic-serif);font-weight:400;font-size:2.25rem;line-height:1;font-variant-numeric:tabular-nums}
+.pt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));gap:var(--cds-gap-md)}
+.pt-bars{display:flex;flex-direction:column;gap:var(--cds-gap-sm);min-height:6rem}
+.pt-bar{display:grid;grid-template-columns:5.5rem 1fr 2rem;align-items:center;gap:var(--cds-gap-sm);font-size:var(--cds-font-size-caption)}
+.pt-bt{height:14px;background:var(--cds-chart-grid);border-radius:var(--cds-radius);overflow:hidden;display:block}
+.pt-bt i{display:block;height:100%;border-radius:var(--cds-radius)}
+.pt-bv{text-align:right;font-variant-numeric:tabular-nums}
+.pt-ctls{display:flex;flex-wrap:wrap;gap:var(--cds-gap-sm)}
+.pt-ctls select,.pt-ctls input{font:inherit;font-size:var(--cds-font-size-caption);padding:var(--cds-pad-xs) var(--cds-pad-sm);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);background:var(--color-bg);color:var(--color-fg)}
+.pt-ctls input{flex:1;min-width:10rem}
+.pt-scroll{max-height:34rem;overflow:auto;border:1px solid var(--color-border-line);border-radius:var(--cds-radius)}
+.pt table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-caption)}
+.pt th{position:sticky;top:0;background:var(--color-panel);text-align:left;font-weight:var(--cds-font-weight-medium);color:var(--color-fg-muted);padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line);white-space:nowrap}
+.pt td{padding:var(--cds-pad-xs) var(--cds-pad-sm);border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.pt td.pt-main{font-weight:var(--cds-font-weight-medium);min-width:11rem}
+.pt td.pt-wide{min-width:16rem}
+.pt td.pt-lines{white-space:pre-line;min-width:22rem}
+.pt-st{display:inline-block;padding:0 .5rem;border-radius:999px;border:1px solid var(--color-border-line);white-space:nowrap}
+.pt-st{font-weight:600;border-color:transparent}
+.pt-st[data-s="CF"]{color:var(--color-ok);background:color-mix(in srgb,var(--color-ok) 16%,transparent)}
+.pt-st[data-s="TBC"]{color:var(--color-warn);background:color-mix(in srgb,var(--color-warn) 18%,transparent)}
+.pt-st[data-s="Pending"]{color:var(--color-bad);background:color-mix(in srgb,var(--color-bad) 14%,transparent)}
+.pt-st[data-s="N/A"]{color:var(--color-fg-muted);background:color-mix(in srgb,var(--color-fg-muted) 14%,transparent)}
+.pt-st[data-p="High"]{color:var(--color-bad);background:color-mix(in srgb,var(--color-bad) 14%,transparent)}
+.pt-st[data-p="Medium"]{color:var(--color-warn);background:color-mix(in srgb,var(--color-warn) 18%,transparent)}
+.pt-st[data-p="Low"]{color:var(--color-ok);background:color-mix(in srgb,var(--color-ok) 16%,transparent)}
+.pt-st[data-p="N/A"]{color:var(--color-fg-muted);background:color-mix(in srgb,var(--color-fg-muted) 14%,transparent)}
+.pt-tiles{grid-template-columns:repeat(auto-fit,minmax(min(100%,7rem),1fr));gap:var(--cds-gap-sm)}
+.pt-tile{padding:var(--cds-pad-sm) var(--cds-pad-md);gap:2px}
+.pt-tile .pt-fig{font-size:1.5rem}
+.pt-tile .pt-note{font-size:.7rem}
+.pt-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:var(--cds-gap-sm)}
+.pt-grid .pt-card{padding:var(--cds-pad-md);gap:var(--cds-gap-xs)}
+.pt-grid h2{font-size:var(--cds-font-size-body)}
+.pt-bars{min-height:0;gap:var(--cds-gap-xs)}
+.pt-bar{grid-template-columns:4rem 1fr 1.5rem}
+.pt-bt{height:8px}
+.pt{--pt-orange:#F16923;--pt-lime:#BCD530}
+.pt h1{font-family:var(--font-anthropic-sans);font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--pt-orange)}
+.pt h2{text-transform:uppercase;letter-spacing:.07em;font-size:var(--cds-font-size-caption);font-weight:600;padding-bottom:var(--cds-pad-xs);border-bottom:2px solid var(--pt-lime)}
+.pt-grid h2{font-size:var(--cds-font-size-caption)}
+.pt-card{border-radius:6px}
+.pt-tile{border-top:3px solid var(--pt-orange)}
+.pt-tile:nth-child(even){border-top-color:var(--pt-lime)}
+.pt-tile .pt-fig{font-family:var(--font-anthropic-sans);font-weight:600;color:var(--pt-orange)}
+.pt-tile:nth-child(even) .pt-fig{color:var(--color-fg)}
+.pt-sync{background:var(--pt-orange);border-color:var(--pt-orange);color:#fff;font-weight:600;letter-spacing:.04em}
+.pt th{text-transform:uppercase;letter-spacing:.05em;font-size:.7rem;color:var(--color-fg);border-bottom:2px solid var(--pt-orange)}
+.pt-st[data-s="CF"]{color:var(--color-fg);background:color-mix(in srgb,var(--pt-lime) 45%,transparent)}
+.pt-st[data-s="TBC"]{color:var(--color-fg);background:color-mix(in srgb,var(--pt-orange) 22%,transparent)}
+.pt-st[data-s="Pending"]{color:#fff;background:var(--pt-orange)}
+.pt-st[data-s="N/A"]{color:var(--color-fg-muted);background:color-mix(in srgb,var(--color-fg-muted) 14%,transparent)}
+.pt-st[data-p="High"]{color:#fff;background:var(--pt-orange)}
+.pt-st[data-p="Medium"]{color:var(--color-fg);background:color-mix(in srgb,var(--pt-orange) 22%,transparent)}
+.pt-st[data-p="Low"]{color:var(--color-fg);background:color-mix(in srgb,var(--pt-lime) 45%,transparent)}
+.pt-st[data-p="N/A"]{color:var(--color-fg-muted);background:color-mix(in srgb,var(--color-fg-muted) 14%,transparent)}
+.pt-wideCard{grid-column:1/-1}
+.pt-vbars{display:flex;align-items:flex-end;gap:var(--cds-gap-sm);overflow-x:auto;padding-top:var(--cds-pad-sm);min-height:12rem}
+.pt-vc{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1 0 3.25rem;max-width:6rem}
+.pt-vv{font-size:var(--cds-font-size-caption);font-weight:600;font-variant-numeric:tabular-nums}
+.pt-vt{height:8rem;width:100%;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid var(--cds-chart-axis)}
+.pt-vt i{display:block;width:70%;max-width:32px;background:#BCD530;border-radius:var(--cds-radius) var(--cds-radius) 0 0}
+.pt-vl{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);writing-mode:vertical-rl;transform:rotate(180deg);max-height:9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-vc{flex:1 0 2.1rem;max-width:3rem}
+.pt-vt{height:14rem;position:relative}
+.pt-vt i{width:100%;max-width:none;border-radius:var(--cds-radius) var(--cds-radius) 0 0}
+.pt-vl{position:absolute;bottom:6px;left:50%;margin-left:-.6em;line-height:1.2;max-height:none;overflow:visible;text-overflow:clip}
+.pt-vl.pt-vin{color:#333;font-weight:600}
+.pt-hbars{display:flex;flex-direction:column;gap:4px}
+.pt-hb{width:100%;padding:5px 10px;border-radius:var(--cds-radius);font-size:var(--cds-font-size-caption);font-weight:600;overflow-wrap:anywhere}
+.pt-scroll.pt-full{max-height:none}
+.pt-ops th{background:#F16923;color:#fff;border-bottom:0;padding:var(--cds-pad-sm) var(--cds-pad-md)}
+.pt-ops th:nth-child(even){background:#BCD530;color:#333}
+.pt-ops td{padding:var(--cds-pad-sm) var(--cds-pad-md);border-left:1px solid color-mix(in srgb,var(--color-border-line) 60%,transparent)}
+.pt-ops td:first-child{border-left:0;color:#F16923;font-weight:700}
+.pt-ops td.pt-main{color:#F16923;font-weight:700}
+.pt-ops tbody tr:nth-child(even) td{background:color-mix(in srgb,#BCD530 14%,transparent)}
+.pt [data-page]{display:flex;flex-direction:column;gap:var(--cds-gap-lg)}
+.pt [data-page][hidden]{display:none}
+.pt-tabs{display:flex;gap:var(--cds-gap-xs);border-bottom:2px solid var(--color-border-line)}
+.pt-tab{font:inherit;font-size:var(--cds-font-size-caption);font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:var(--cds-pad-xs) var(--cds-pad-md);background:transparent;color:var(--color-fg-muted);border:0;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer}
+.pt-tab[aria-pressed="true"]{color:var(--color-fg);border-bottom-color:#F16923}
+.pt-hb{min-width:min(100%,14rem);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pt-hm{white-space:nowrap;font-weight:500}
+.pt-hb[data-p="High"]{background:#F16923;color:#fff}
+.pt-hb[data-p="Medium"]{background:#F8B896;color:#333}
+.pt-hb[data-p="Low"]{background:#DDEA97;color:#333}
+.pt-hb[data-p="N/A"]{background:#C8C8C8;color:#333}
+@container (max-width:640px){.pt-sec{display:none}}
+</style>
+
+<header>
+<img src="/_blob/c66368900c98e1ad286a10d557ea3cf6" alt="Turtle 23 Company Limited" style="display:block;width:100%;max-width:26rem;height:auto;margin-bottom:var(--cds-gap-md)">
+<h1>Project tracking</h1>
+<p class="pt-sub">Source: Project Tracking.xlsx (T23 Management Weekly), sheets "Project Update" and "Operation". Sync reads the workbook live with your Microsoft 365 access.</p>
+<div class="pt-syncrow"><button class="pt-sync" type="button">Sync data</button><span class="pt-note" data-draw="synced">—</span></div>
+<p class="pt-take"><b data-draw="kpi" data-source="kpis" data-field="cf">—</b> of <b data-draw="kpi" data-source="kpis" data-field="total">—</b> projects are marked CF; <b data-draw="kpi" data-source="kpis" data-field="high">—</b> are high priority and <b data-draw="kpi" data-source="kpis" data-field="hold">—</b> are still pending or TBC.</p>
+</header>
+
+<nav class="pt-tabs" aria-label="Sheets"><button type="button" class="pt-tab" data-tab="update" aria-pressed="true">Project Update</button><button type="button" class="pt-tab" data-tab="ops" aria-pressed="false">Operation</button></nav>
+
+<div id="pt-update" data-page>
+<section class="pt-tiles">
+<div class="pt-card pt-tile"><p class="pt-note">All projects</p><p class="pt-fig" data-draw="kpi" data-source="kpis" data-field="total">—</p><p class="pt-note">Rows on the Project Update sheet</p></div>
+<div class="pt-card pt-tile"><p class="pt-note">Status CF</p><p class="pt-fig" data-draw="kpi" data-source="kpis" data-field="cf">—</p><p class="pt-note">Treated as confirmed</p></div>
+<div class="pt-card pt-tile"><p class="pt-note">Priority High</p><p class="pt-fig" data-draw="kpi" data-source="kpis" data-field="high">—</p><p class="pt-note">Of all projects</p></div>
+<div class="pt-card pt-tile"><p class="pt-note">Pending or TBC</p><p class="pt-fig" data-draw="kpi" data-source="kpis" data-field="hold">—</p><p class="pt-note">Not yet decided</p></div>
+</section>
+
+<section class="pt-grid">
+<div class="pt-card"><h2>By status</h2><p class="pt-note">Number of projects per status</p><div class="pt-bars" data-draw="bars" data-source="status_counts" data-by="status" data-accent="CF"></div></div>
+<div class="pt-card"><h2>By priority</h2><p class="pt-note">Number of projects per priority</p><div class="pt-bars" data-draw="bars" data-source="priority_counts" data-by="priority" data-accent="High"></div></div>
+<div class="pt-card pt-wideCard"><h2>Priority per project</h2><p class="pt-note">Bar length and color show each project's priority, High first (High orange, Medium light orange, Low light green, N/A grey)</p><div class="pt-hbars" data-draw="vbars" data-source="project_pics" data-by="project"></div></div>
+</section>
+
+<section class="pt-card">
+<h2>Project Update</h2>
+<div class="pt-scroll pt-full">
+<table class="pt-ops" data-source="projects" data-row-key="id">
+<thead><tr><th>No.</th><th data-field="project">Project</th><th class="pt-sec" data-field="location">Location</th><th class="pt-sec" data-field="pic">PIC</th><th data-field="status">Status</th><th data-field="priority">Priority</th><th data-field="progress">Progress</th><th class="pt-sec" data-field="action_plan">Action Plan</th><th class="pt-sec" data-field="concern">Concern</th></tr></thead>
+<tbody data-draw="rows"></tbody>
+</table>
+</div>
+</section>
+
+</div>
+
+<div id="pt-ops" data-page hidden>
+<section class="pt-card">
+<h2>Operation</h2>
+<p class="pt-note">Restaurants with a current note on the Operation sheet, by department. Departments and columns with no notes are hidden.</p>
+<div class="pt-scroll">
+<table class="pt-ops" data-source="ops" data-row-key="id">
+<thead><tr><th>No.</th><th data-field="restaurant">Restaurant</th><th data-field="chef">Chef partner</th><th data-field="pic">PIC</th><th data-field="bizdev">Business Development</th><th data-field="operation">Operation</th><th data-field="marketing">Marketing</th><th data-field="accounting">Accounting</th><th data-field="procurement">Procurement</th><th data-field="finance">Finance</th><th data-field="legal_it">Legal and IT</th><th data-field="hr">HR</th></tr></thead>
+<tbody data-draw="opsrows"></tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+
+<script>
+(function () {
+  const rowsOf = (id) => { const g = dash.data(id); return g.status === 'ok' ? g.data : null; };
+
+  dash.calc('kpis', {
+    inputs: ['projects'],
+    title: 'Headline counts',
+    description: 'Project counts by status and priority.',
+    fn: (projects) => [{
+      total: projects.length,
+      cf: projects.filter((r) => r.status === 'CF').length,
+      high: projects.filter((r) => r.priority === 'High').length,
+      hold: projects.filter((r) => r.status === 'Pending' || r.status === 'TBC').length
+    }]
+  });
+  dash.calc('status_counts', {
+    inputs: ['projects'],
+    title: 'Projects by status',
+    description: 'Number of projects per status value.',
+    fn: (projects) => ['CF', 'TBC', 'Pending', 'N/A']
+      .map((s) => ({ status: s, n: projects.filter((r) => r.status === s).length }))
+      .filter((r) => r.n > 0)
+  });
+  dash.calc('priority_counts', {
+    inputs: ['projects'],
+    title: 'Projects by priority',
+    description: 'Number of projects per priority value.',
+    fn: (projects) => ['High', 'Medium', 'Low', 'N/A']
+      .map((s) => ({ priority: s, n: projects.filter((r) => r.priority === s).length }))
+      .filter((r) => r.n > 0)
+  });
+
+  dash.loader('projects', {
+    description: 'Reads the Project Update sheet as one row per project: status, priority, the last 4 progress updates and the last 4 items from Action Plan and Action 2.',
+    fn: ({ answer }) => {
+      const txt = typeof answer === 'string' ? answer
+        : (answer && Array.isArray(answer.content) ? answer.content.map((c) => (c && c.text) || '').join('\n')
+          : (answer && typeof answer.text === 'string' ? answer.text : ''));
+      if (!txt) throw new Error('Unexpected answer from Microsoft 365 (keys: ' + Object.keys(answer || {}).join(', ') + ')');
+      const clean = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+      const bullets = (s) => String(s || '').split(/\s*'\s*-\s*/).map((b) => clean(b).replace(/^-\s*/, '')).filter(Boolean);
+      const rows = [];
+      let inSheet = false;
+      for (const line of txt.split('\n')) {
+        if (line.startsWith('## Sheet:')) { inSheet = true; continue; }
+        if (!inSheet) continue;
+        const c = line.split('\t');
+        if (c.length < 8 || !/^\s*\d+\s*$/.test(c[1]) || !clean(c[2])) continue;
+        rows.push({
+          id: rows.length + 1,
+          project: clean(c[2]),
+          location: clean(c[3]),
+          pic: clean(c[4]),
+          status: clean(c[6]) || 'N/A',
+          priority: clean(c[7]) || 'N/A',
+          progress: bullets(c[8]).slice(-4).map((b) => '• ' + b).join('\n'),
+          action_plan: bullets(c[9]).concat(bullets(c[10])).slice(-4).map((b) => '• ' + b).join('\n'),
+          concern: bullets(c[11]).map((b) => '• ' + b).join('\n')
+        });
+      }
+      if (!rows.length) throw new Error('No project rows found in the Project Update sheet');
+      return rows;
+    }
+  });
+
+  dash.loader('ops', {
+    description: 'Reads the Operation sheet as one row per restaurant, with each department\'s note.',
+    fn: ({ answer }) => {
+      const txt = typeof answer === 'string' ? answer
+        : (answer && Array.isArray(answer.content) ? answer.content.map((c) => (c && c.text) || '').join('\n')
+          : (answer && typeof answer.text === 'string' ? answer.text : ''));
+      if (!txt) throw new Error('Unexpected answer from Microsoft 365 (keys: ' + Object.keys(answer || {}).join(', ') + ')');
+      const clean = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+      const note = (s) => clean(s).replace(/^-\s*/, '').replace(/\s*'\s*-\s*/g, '; ').replace(/\s+-\s+/g, '; ');
+      const rows = [];
+      let inTable = false;
+      for (const line of txt.split('\n')) {
+        if (/^No\.\tRestaurant/.test(line)) { inTable = true; continue; }
+        if (!inTable) continue;
+        const c = line.split('\t');
+        if (c.length < 13 || !clean(c[1])) continue;
+        rows.push({
+          id: rows.length + 1,
+          no: clean(c[0]),
+          restaurant: clean(c[1]),
+          chef: clean(c[2]),
+          pic: clean(c[3]),
+          bizdev: note(c[4]),
+          operation: note(c[5]),
+          marketing: note(c[7]),
+          accounting: note(c[8]),
+          procurement: note(c[9]),
+          finance: note(c[10]),
+          legal_it: note(c[11]),
+          hr: note(c[12])
+        });
+      }
+      if (!rows.length) throw new Error('No restaurant rows found in the Operation sheet');
+      return rows;
+    }
+  });
+
+  dash.calc('project_pics', {
+    inputs: ['projects'],
+    title: 'PICs per project',
+    description: 'Number of people in the PIC column of each project; entries split on commas, slashes and &, the K. and N\' prefixes dropped, N/A ignored.',
+    fn: (projects) => projects.map((r) => {
+      const seen = new Set();
+      String(r.pic || '').split(/\s*(?:,|\/|&)\s*/).forEach((p) => {
+        const name = p.trim().replace(/^(K\.|N')\s*/i, '').trim().toLowerCase();
+        if (name && name !== 'n/a') seen.add(name);
+      });
+      return { id: r.id, status: r.status, project: r.project, priority: r.priority || 'N/A', score: ({ High: 3, Medium: 2, Low: 1 })[r.priority] || 0.5, n: seen.size };
+    }).sort((a, b) => {
+      const order = { High: 0, Medium: 1, Low: 2, 'N/A': 3 };
+      const rank = (x) => (x.status === 'TBC' ? 10 : 0) + (order[x.priority] ?? 3);
+      return (rank(a) - rank(b)) || (a.id - b.id);
+    })
+  });
+
+  dash.draw('vbars', (el) => {
+    const rows = rowsOf(el.dataset.source);
+    if (!rows || !rows.length) { el.replaceChildren(); return; }
+    const by = el.dataset.by;
+    const frag = document.createDocumentFragment();
+    rows.forEach((r, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'pt-hb';
+      bar.dataset.p = r.priority;
+      bar.style.width = (100 * r.score / 3) + '%';
+      const nm = document.createElement('span'); nm.textContent = r[by];
+      const mt = document.createElement('span'); mt.className = 'pt-hm'; mt.textContent = r.status + ' · ' + r.priority;
+      bar.append(nm, mt);
+      frag.appendChild(bar);
+    });
+    el.replaceChildren(frag);
+  });
+
+  dash.draw('kpi', (el) => {
+    const r = rowsOf('kpis');
+    el.textContent = r && r[0] ? d3.format(',')(r[0][el.dataset.field]) : '—';
+  });
+
+  dash.draw('bars', (el) => {
+    const rows = rowsOf(el.dataset.source);
+    if (!rows || !rows.length) { el.replaceChildren(); return; }
+    const by = el.dataset.by, max = d3.max(rows, (r) => r.n);
+    const frag = document.createDocumentFragment();
+    rows.forEach((r) => {
+      const row = document.createElement('div'); row.className = 'pt-bar';
+      const l = document.createElement('span'); l.textContent = r[by];
+      const t = document.createElement('span'); t.className = 'pt-bt';
+      const f = document.createElement('i');
+      f.style.width = (100 * r.n / max) + '%';
+      const pcol = { High: '#F16923', Medium: '#F8B896', Low: '#DDEA97', 'N/A': '#C8C8C8' };
+      f.style.background = by === 'priority' ? (pcol[r[by]] || '#C8C8C8') : (r[by] === el.dataset.accent ? '#BCD530' : '#F16923');
+      t.appendChild(f);
+      const v = document.createElement('span'); v.className = 'pt-bv'; v.textContent = d3.format(',')(r.n);
+      row.append(l, t, v); frag.appendChild(row);
+    });
+    el.replaceChildren(frag);
+  });
+
+  const cell = (tr, text, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; td.textContent = text || ''; tr.appendChild(td); return td; };
+  const f = { status: '', priority: '', q: '' };
+  const order = { High: 0, Medium: 1, Low: 2, 'N/A': 3 };
+
+  dash.draw('rows', (tb) => {
+    const rows = rowsOf('projects');
+    if (!rows) { tb.replaceChildren(); return; }
+    const q = f.q.trim().toLowerCase();
+    const list = rows
+      .filter((r) => (!f.status || r.status === f.status) && (!f.priority || r.priority === f.priority) &&
+        (!q || [r.project, r.location, r.pic, r.progress, r.action_plan].join(' ').toLowerCase().includes(q)))
+      .sort((a, b) => {
+        const rank = (r) => (r.status === 'TBC' ? 10 : 0) + (order[r.priority] ?? 3);
+        return (rank(a) - rank(b)) || (a.id - b.id);
+      });
+    const frag = document.createDocumentFragment();
+    list.forEach((r, i) => {
+      const tr = document.createElement('tr'); tr.dataset.key = String(r.id);
+      cell(tr, String(i + 1), '');
+      cell(tr, r.project, 'pt-main');
+      cell(tr, r.location, 'pt-sec');
+      cell(tr, r.pic, 'pt-sec');
+      const s = cell(tr, '', ''); const b = document.createElement('span'); b.className = 'pt-st'; b.dataset.s = r.status; b.textContent = r.status; s.appendChild(b);
+      const p = cell(tr, '', ''); const pb = document.createElement('span'); pb.className = 'pt-st'; pb.dataset.p = r.priority; pb.textContent = r.priority; p.appendChild(pb);
+      cell(tr, r.progress, 'pt-wide pt-lines');
+      cell(tr, r.action_plan, 'pt-sec pt-wide pt-lines');
+      cell(tr, r.concern, 'pt-sec pt-wide pt-lines');
+      frag.appendChild(tr);
+    });
+    tb.replaceChildren(frag);
+  });
+
+  dash.draw('opsrows', (tb) => {
+    const rows = rowsOf('ops');
+    if (!rows) { tb.replaceChildren(); return; }
+    const dept = ['bizdev', 'operation', 'marketing', 'accounting', 'procurement', 'finance', 'legal_it', 'hr'];
+    const list = rows.filter((r) => r.restaurant !== 'Monthly Report' && (dept.some((k) => r[k]) || r.restaurant === 'Marlo'));
+    const used = ['chef', 'pic'].concat(dept).filter((k) => list.some((r) => r[k]));
+    tb.closest('table').querySelectorAll('th[data-field]').forEach((th) => {
+      const f = th.dataset.field;
+      th.hidden = !(f === 'no' || f === 'restaurant' || used.includes(f));
+    });
+    const frag = document.createDocumentFragment();
+    list.forEach((r, i) => {
+      const tr = document.createElement('tr'); tr.dataset.key = String(r.id);
+      cell(tr, String(i + 1), '');
+      cell(tr, r.restaurant, 'pt-main');
+      used.forEach((k) => cell(tr, r[k], 'pt-wide'));
+      frag.appendChild(tr);
+    });
+    tb.replaceChildren(frag);
+  });
+
+  let stamp = null, wasBusy = true;
+  dash.draw('synced', (el) => {
+    const a = dash.data('projects'), b = dash.data('ops');
+    const busy = a.status !== 'ok' || b.status !== 'ok' || a.refreshing || b.refreshing;
+    if (!busy && (stamp === null || wasBusy)) stamp = new Date();
+    wasBusy = busy;
+    el.textContent = stamp ? 'Synced ' + stamp.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '—';
+  });
+  document.querySelectorAll('.pt-tab').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.pt-tab').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('[data-page]').forEach((p) => { p.hidden = p.id !== 'pt-' + b.dataset.tab; });
+    dash.setLink('pt-' + b.dataset.tab);
+  }));
+  const syncBtn = document.querySelector('.pt-sync');
+  if (syncBtn) {
+    syncBtn.addEventListener('click', () => { dash.refresh('projects'); dash.refresh('ops'); });
+    dash.onData(() => { syncBtn.disabled = !!(dash.data('projects').refreshing || dash.data('ops').refreshing); });
+  }
+  document.querySelectorAll('.pt-ctl').forEach((c) => c.addEventListener('input', () => { f[c.dataset.f] = c.value; dash.draw('rows'); }));
+})();
+</script>
